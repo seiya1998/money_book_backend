@@ -1,23 +1,16 @@
 FROM php:8.2-fpm
 RUN apt-get update \
-    && apt-get install -y \
+  && apt-get -y install \
     git \
-    zip \
     unzip \
-    vim \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
     libmcrypt-dev \
-    libpng-dev \
-    libfontconfig1 \
-    libxrender1
+    libzip-dev \
+    libicu-dev \
+    libonig-dev
 
-# docker-php-ext-configureとdocker-php-ext-installは、
-# コンテナイメージに事前に圧縮されて入っているエクステンションを操作できます。
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install gd
 RUN docker-php-ext-install bcmath
-RUN docker-php-ext-install pdo_mysql mysqli exif
+RUN docker-php-ext-install pdo_mysql mysqli zip
+
 # composer インストール
 RUN cd /usr/bin && curl -s http://getcomposer.org/installer | php && ln -s /usr/bin/composer.phar /usr/bin/composer
 
